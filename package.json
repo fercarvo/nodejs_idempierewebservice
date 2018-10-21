@@ -1,0 +1,19 @@
+{
+  "name": "NodeJS_iDempiereWebService",
+  "version": "1.0.0",
+  "description": "",
+  "main": "requestWS.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Edgar Carvajal",
+    "email": "efcu93@gmail.com",
+    "url": "https://fercarvo.github.io"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.88.0",
+    "xml2js": "^0.4.19"
+  }
+}
