@@ -1,4 +1,4 @@
-# NodeJS-iDempiereWebService
+# nodejs_idempierewebservice
 
 ## Caracteristicas
 
