@@ -7,19 +7,19 @@ iDempiere WebService es una interfaz que permite llamar a Servicios Web de un si
 ## Instalación
 
 ```bash
-npm install --save git+https://github.com/fercarvo/NodeJS-iDempiereWebService.git
+npm install --save git+https://github.com/fercarvo/nodejs_idempierewebservice.git
 ```
 
 En caso de no tener git, solo
 
 ```bash
-npm install --save https://github.com/fercarvo/NodeJS-iDempiereWebService/tarball/master
+npm install --save https://github.com/fercarvo/nodejs_idempierewebservice/tarball/master
 ```
 
 ## Cómo Usar
 
 ```js
-var { requestWS } = require('NodeJS_iDempiereWebService')
+var { requestWS } = require('nodejs_idempierewebservice')
 
 var params = [ //Parametros del proceso (Informe y proceso)
     {column: "C_Project_ID", val: 1000000},
