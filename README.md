@@ -30,6 +30,8 @@ var params = [ //Parametros del proceso (Informe y proceso)
 var url = 'https://idempiere.facebook.com' //URL del servidor idempiere
 
 var context = { //Parametros del usuario de sesion, es el ctx, quien ejecuta el proceso
+    username: 'efcu93',
+    password: 'mysecretfoobarhaha',
     ad_client_id: 1000002.
     ad_role_id: 1000099,
     ad_org_id: 1000000,
@@ -38,10 +40,7 @@ var context = { //Parametros del usuario de sesion, es el ctx, quien ejecuta el 
 
 var nombre_web_service = "crear_comisiones"
 
-var user = "foobar" //nombre de usuario del que ejecuta el proceso
-var password = "123456secret" //password del usuario que ejecuta el proceso 
-
-requestWS(url, nombre_web_service, context, user, password, params)
+requestWS(url, nombre_web_service, context, params)
   .then(data => {
     console.log('data de la respuesta del web service', data)
   })

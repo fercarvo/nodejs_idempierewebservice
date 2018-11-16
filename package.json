@@ -1,19 +1,19 @@
 {
-  "name": "NodeJS_iDempiereWebService",
-  "version": "1.0.0",
-  "description": "",
-  "main": "requestWS.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": {
-    "name": "Edgar Carvajal",
-    "email": "efcu93@gmail.com",
-    "url": "https://fercarvo.github.io"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "request": "^2.88.0",
-    "xml2js": "^0.4.19"
-  }
+    "name": "nodejs_idempierewebservice",
+    "version": "1.0.1",
+    "description": "iDempiere WebService es una interfaz que permite llamar a Servicios Web de un sistema iDempiere v3.1, esto para ejecutar en su mayor parte, Procesos confgurados previamente",
+    "main": "requestWS.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": {
+        "name": "Edgar Carvajal",
+        "email": "efcu93@gmail.com",
+        "url": "https://fercarvo.github.io"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "request": "^2.88.0",
+        "xml2js": "^0.4.19"
+    }
 }
