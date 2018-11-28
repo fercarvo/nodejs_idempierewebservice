@@ -35,7 +35,7 @@ function requestWS(server, ws_name, ctx, params) {
                 <_0:ParamValues>
                     ${params.reduce((acum, obj) => { return acum + `
                         <_0:field column="${obj.column}">
-                            <_0:val>${obj.val}</_0:val>
+                            <_0:val>${obj.val === undefined || obj.val === null ? '' : obj.val}</_0:val>
                         </_0:field>`
                     }, '')}
                 </_0:ParamValues>
