@@ -24,6 +24,14 @@ var parseString = require('xml2js').parseString;
  * @returns {Promise<string>} Resolve o Reject una promesa que será del tipo string
  */
 function requestWS(server, ws_name, ctx, params) {
+
+    for (var par of params) {
+        var value = `${par.val}`
+
+        if (value.length > 255)
+            console.log(`Possible data loss, ParamValue with column=${par.column} has ${value.length} characters, max 255`)
+    }
+
     var soap = `
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:_0="http://idempiere.org/ADInterface/1_0">
    <soapenv:Header/>
@@ -44,10 +52,10 @@ function requestWS(server, ws_name, ctx, params) {
                <_0:user>${ctx.username}</_0:user>
                <_0:pass>${ctx.password}</_0:pass>
                <_0:lang>es_EC</_0:lang>
-               <_0:ClientID>${ctx.ad_client_id}</_0:ClientID>
-               <_0:RoleID>${ctx.ad_role_id}</_0:RoleID>
-               <_0:OrgID>${ctx.ad_org_id}</_0:OrgID>
-               <_0:WarehouseID>${ctx.m_warehouse_id || 0}</_0:WarehouseID>
+               <_0:ClientID>${ Number(ctx.ad_client_id )}</_0:ClientID>
+               <_0:RoleID>${ Number(ctx.ad_role_id )}</_0:RoleID>
+               <_0:OrgID>${ Number(ctx.ad_org_id )}</_0:OrgID>
+               <_0:WarehouseID>${ Number(ctx.m_warehouse_id || 0)}</_0:WarehouseID>
                <_0:stage>0</_0:stage>
             </_0:ADLoginRequest>
          </_0:ModelRunProcessRequest>
@@ -56,6 +64,7 @@ function requestWS(server, ws_name, ctx, params) {
 </soapenv:Envelope>`
 
     return new Promise((resolve, reject) => {
+
         var options = { 
             method: 'POST',
             url: `${server}/ADInterface/services/ModelADService`,
@@ -66,30 +75,53 @@ function requestWS(server, ws_name, ctx, params) {
         }
 
         request(options, function (error, response, body) {
-            //console.log(body)
 
-            if (error) {
+            if (error)
                 return reject(error.message)
+
+            if (response.statusCode === 404)
+                return reject(response.statusCode +' '+ response.statusMessage)
+
+            if (response.statusCode !== 200 && response.statusCode !== 302) {
+
+                parseString(body, (err, result) => {
+                    if (err)
+                        return reject(body)
+
+                    try {
+                        var soap_body = result['soap:Envelope']['soap:Body'][0]
+                        var soap_fault = soap_body['soap:Fault'][0]
+                        var faultstring = soap_fault['faultstring'][0]
+
+                        reject(faultstring)
+                    } catch (e) {
+                        console.error(e)
+                        reject(result)
+                    }
+                })
+
             } else {
                 parseString(body, (err, result) => {
                     if (err)
-                        return reject(err)
+                        return reject(body)
 
-                    result = result['soap:Envelope']['soap:Body'][0]['ns1:runProcessResponse'][0]
-                    result = result['RunProcessResponse'][0]
-                    var iserror = result['$']['IsError'] == "true"
+                    try {
+                        var soap_body = result['soap:Envelope']['soap:Body'][0]
+                        var runProcessResponse = soap_body['ns1:runProcessResponse'][0]
+                        var soap_result = runProcessResponse['RunProcessResponse'][0]
+                        var iserror = soap_result['$']['IsError'] == "true"
 
-                    if (response.statusCode !== 200 && response.statusCode !== 302) {
-                        reject(response.statusCode +" "+ response.statusMessage)
-                    } else {
                         if (iserror) {
-                            reject(result['Error'][0])
+                            reject(soap_result['Error'][0])
                         } else {
-                            resolve(result['Summary'][0])
+                            resolve(soap_result['Summary'][0])
                         }
-                    }
-                })                 
-            }                
+                    } catch (e) {
+                        console.error(e)
+                        return reject(body)
+                    }                    
+                })
+            }               
         })    
     })    
 }
