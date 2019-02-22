@@ -25,23 +25,26 @@ var parseString = require('xml2js').parseString;
  */
 function requestWS(server, ws_name, ctx, params) {
     
-    if (!!ctx || typeof ctx !== 'object')
-        throw "ctx undefined or not an Object";
+    if (!( !!ctx ) || typeof ctx !== 'object')
+        throw Error("ctx undefined or not an Object");
 
     if (ctx.username === null || ctx.username === undefined)
-        throw "ctx.username undefined";
+        throw Error("ctx.username undefined");
 
     if (ctx.password === null || ctx.password === undefined )
-        throw "ctx.password undefined";
+        throw Error("ctx.password undefined");
 
     if (ctx.ad_client_id === null || ctx.ad_client_id === undefined || isNaN(ctx.ad_client_id))
-        throw "ctx.ad_client_id undefined";
+        throw Error("ctx.ad_client_id undefined or not an Integer");
+
+    if (ctx.ad_role_id === null || ctx.ad_role_id === undefined || isNaN(ctx.ad_role_id))
+        throw Error("ctx.ad_role_id undefined or not an Integer");
 
     if (ctx.ad_org_id === null || ctx.ad_org_id === undefined || isNaN(ctx.ad_org_id))
-        throw "ctx.ad_org_id undefined";
+        throw Error("ctx.ad_org_id undefined or not an Integer");
 
     if (!Array.isArray(params))
-        throw "params is not an Array"
+        throw Error("params is not an Array");
 
     for (var par of params) {
         var value = `${par.val}`
