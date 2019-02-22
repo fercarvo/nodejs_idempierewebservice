@@ -24,13 +24,31 @@ var parseString = require('xml2js').parseString;
  * @returns {Promise<string>} Resolve o Reject una promesa que será del tipo string
  */
 function requestWS(server, ws_name, ctx, params) {
+    
+    if (!!ctx || typeof ctx !== 'object')
+        throw "ctx undefined or not an Object";
+
+    if (ctx.username === null || ctx.username === undefined)
+        throw "ctx.username undefined";
+
+    if (ctx.password === null || ctx.password === undefined )
+        throw "ctx.password undefined";
+
+    if (ctx.ad_client_id === null || ctx.ad_client_id === undefined || isNaN(ctx.ad_client_id))
+        throw "ctx.ad_client_id undefined";
+
+    if (ctx.ad_org_id === null || ctx.ad_org_id === undefined || isNaN(ctx.ad_org_id))
+        throw "ctx.ad_org_id undefined";
+
+    if (!Array.isArray(params))
+        throw "params is not an Array"
 
     for (var par of params) {
         var value = `${par.val}`
 
         if (value.length > 255)
             console.log(`Possible data loss, ParamValue with column=${par.column} has ${value.length} characters, max 255`)
-    }
+    }    
 
     var soap = `
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:_0="http://idempiere.org/ADInterface/1_0">
